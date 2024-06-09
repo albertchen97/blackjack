@@ -4,7 +4,7 @@
 
 ## Documentation
 
-You can find detailed information about this project in `Blackjack Group 2 SRS and UML Phase 2.pdf`.
+You can find detailed information about this project in [Blackjack Group 2 SRS and UML Phase 2.pdf](https://github.com/albertchen97/blackjack/blob/main/Blackjack%20Group%202%20SRS%20and%20UML%20Phase%202.pdf).
 
 ## Potential Improvements
 - Fix the typo in the directory name: `BlackJAck/` -> `Blackjack/`
