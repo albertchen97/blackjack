@@ -11,3 +11,5 @@ You can find detailed information about this project in `Blackjack Group 2 SRS a
 - README.md: Add project demo (GIF/images)
 - Framework: Migrate to Spring/SpringBoot
 - Database: Add a SQL database
+- Containerize the project using Docker
+- Implement a CI/CD pipeline
