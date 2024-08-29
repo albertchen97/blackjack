@@ -7,16 +7,18 @@ class Server {
 
 	public static void main(String[] args) {
 		ServerSocket server = null;
+		int port = 8000;
 
 		try {
-
-			// server is listening on port 1234
-			server = new ServerSocket(8000);
+			server = new ServerSocket(port);
+			System.out.println("Server has been created.");
+			System.out.println("Port " + port + " is listening........");
 			server.setReuseAddress(true);
 			House house = new House();
 			Account[] accountList = new Account[100];
 
-			// MADE A READER
+			// TODO: Create a MySQL database
+			// TODO: Implement a JDBC
 			try (BufferedReader br = new BufferedReader(new FileReader("Playerlist.txt"))) {
 				String line;
 				while ((line = br.readLine()) != null) {
@@ -28,9 +30,9 @@ class Server {
 				}
 			} catch (IOException e) {
 				System.out.println("input output error");
+				System.out.println(e.getMessage());
 			}
 
-			System.out.println("Listening........");
 
 			// running infinite loop for getting
 			// client request
@@ -60,6 +62,7 @@ class Server {
 			if (server != null) {
 				try {
 					server.close();
+					System.out.println("Server is closed.");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
