@@ -13,7 +13,7 @@ public class UserAuthentication implements Serializable {
     }
 
     public boolean authenticate(UserAuthentication x) {
-        return x.getUsername().equals(this.username) && x.getPassword().equals(this.password);
+        return x.username.equals(this.username) && x.password.equals(this.password);
     }
 
     // getters and setters for username and password

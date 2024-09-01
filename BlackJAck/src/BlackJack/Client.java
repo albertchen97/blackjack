@@ -9,7 +9,9 @@ import javax.swing.JOptionPane;
 public class Client {
 
     // driver code
-    public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        int port = 8000;
+        String host = "localhost";
         // Initiate the UI
         Account account = new Account();
         ClientGUI clientGUI = new ClientGUI(account);
@@ -17,9 +19,9 @@ public class Client {
         Player player = new Player(account.getUserID());
 
         // Establish the connection with server
-        try (Socket socket = new Socket("localhost", 8000)) {
+        try (Socket socket = new Socket(host, port)) {
 
-            System.out.println("Connected to server");
+            System.out.println("Connected to server" + host + ":" + port);
 
             // Writing to server
             OutputStream outputStream = socket.getOutputStream();
