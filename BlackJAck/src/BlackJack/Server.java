@@ -19,23 +19,6 @@ class Server {
             House house = new House();
             Account[] accountList = new Account[100];
 
-            // TODO: Create a MySQL database
-            // TODO: Implement a JDBC
-            File file = new File(".\\src\\Playerlist.txt");
-
-            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-                String line;
-                while ((line = br.readLine()) != null) {
-                    String username = line;
-                    String password = br.readLine();
-                    // Do something with the username and password, e.g. print them out
-                    System.out.println("Username: " + username);
-                    System.out.println("Password: " + password);
-                }
-            } catch (IOException e) {
-                System.out.println("input output error");
-                System.out.println(e.getMessage());
-            }
 
             // running infinite loop for getting
             // client request
@@ -73,6 +56,23 @@ class Server {
                     e.printStackTrace();
                 }
             }
+        }
+        // TODO: Create a MySQL database
+        // TODO: Implement a JDBC
+        File file = new File(".\\src\\Playerlist.txt");
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String username = line;
+                String password = br.readLine();
+                // Do something with the username and password, e.g. print them out
+                System.out.println("Username: " + username);
+                System.out.println("Password: " + password);
+            }
+        } catch (IOException e) {
+            System.out.println("input output error");
+            System.out.println(e.getMessage());
         }
     }
 
