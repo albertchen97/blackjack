@@ -15,25 +15,27 @@ import java.util.Set;
 
 // NIO 服务器
 public class NIOServer {
-    public NIOServer() throws IOException {
+    public static void main(String[] args) {
 
-        try (
-                ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();  // 每链接一个新的client就创建一个channel
-                Selector selector = Selector.open();)   // 创建一个selector来管理不同的channel
-        {
-
-            // 创建一个1024字节的ByteBuffer来缓存channel中传输的字节
-            ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
+        // 创建一个selector来管理不同的channel
+        try (ServerSocketChannel serverSocketChannel = ServerSocketChannel.open(); Selector selector = Selector.open();) {
 
             // 使用LocalHost的IP地址作为服务器的链接Socket的IP地址
-            InetSocketAddress inetSocketAddress = new InetSocketAddress(InetAddress.getLocalHost(), 8888);
+            InetSocketAddress inetSocketAddress = new InetSocketAddress(InetAddress.getLocalHost(), 8000);
 
             // 将ServerSocketChannel与创建的InetSocketAddress绑定
             serverSocketChannel.bind(inetSocketAddress);
 
+            // non-blocking mode
+            serverSocketChannel.configureBlocking(false);
+
             // 将这个新绑定的 ServerSocketChannel 注册到 Selector ，说明关注点为 OP_ACCEPT（即接受新连接）
             serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
+            // 从堆空间中分配一个 1024 字节的 ByteBuffer 来缓存 channel 中传输的字节
+            ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
+
+            // 阻塞等待就绪的 channel
             while (true) {
                 // 查找是否有处于 ready 状态的 key 并将其加入 selected-key set
                 if (selector.select() == 0) { // 防止虚假唤醒（spurious wakeup)
@@ -41,12 +43,14 @@ public class NIOServer {
                 }
                 // 获取被选择的key set
                 Set<SelectionKey> selectedKeys = selector.selectedKeys();
+
+                // 遍历所有被选择的key
                 Iterator<SelectionKey> selectionKeyIterator = selectedKeys.iterator();
                 while (selectionKeyIterator.hasNext()) {
                     SelectionKey currentKey = selectionKeyIterator.next();
 
-                    // TODO: 连接client
                     if (currentKey.isAcceptable()) {
+                        // Pattern matching
                         if (currentKey.channel() instanceof ServerSocketChannel channel) {
                             SocketChannel acceptedChannel = channel.accept();
                             Socket socket = acceptedChannel.socket();
@@ -54,20 +58,15 @@ public class NIOServer {
                             System.out.println("CONNECTED:" + clientInfo);
                         }
                     }
+                    // 用完的selected key需要被立刻移除以免旧的key被重复使用
+                    selectionKeyIterator.remove();
                 }
-
-                // 用完的selected key需要被立刻移除以免旧的key被重复使用
-                selectionKeyIterator.remove();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
- }
-
-
-
-
+}
 
 
 //public class NIOServer extends Thread {
